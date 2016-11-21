@@ -11,9 +11,7 @@
 	<name>govac-consumer-api</name>
 	<url>http://contribute.gov.ro</url>
 	<description>
-		<![CDATA[
-      govac-consumer-api
-    ]]>
+		<![CDATA[ govac-consumer-api ]]>
 	</description>
 
 	<properties>
@@ -24,7 +22,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.0.RELEASE</version>
+		<version>1.4.2.RELEASE</version>
 	</parent>
 
 	<dependencies>
