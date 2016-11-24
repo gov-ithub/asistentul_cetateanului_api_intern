@@ -2,8 +2,15 @@ package org.govithub.govac.consumerapi.dao;
 
 import java.util.List;
 
-import org.govithub.govac.consumerapi.model.Notification;
-import org.govithub.govac.consumerapi.model.User;
+import org.govithub.govac.dao.model.Application;
+import org.govithub.govac.dao.model.Notification;
+import org.govithub.govac.dao.model.Provider;
+import org.govithub.govac.dao.model.User;
+import org.govithub.govac.dao.model.json.JsonMetadata;
+import org.govithub.govac.dao.repository.ApplicationRepository;
+import org.govithub.govac.dao.repository.NotificationRepository;
+import org.govithub.govac.dao.repository.ProviderRepository;
+import org.govithub.govac.dao.repository.UserRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,16 +33,41 @@ public class NotificationRepositoryTest {
 	@Autowired
 	public NotificationRepository notificationRepository;
 	
+	@Autowired
+	public ProviderRepository providerRepository;
+	
+	@Autowired
+	public ApplicationRepository applicationRepository;
+	
+	
+	private JsonMetadata requirements = new JsonMetadata();
 	@Before
 	public void init() {
-    	userRepository.save(new User(1, "test.user", "testFN", "testLN", "test@email.com", "123456", "1231231232222"));
-    	user = userRepository.findByUsername("test.user");
+		requirements.set("reqKey", "reqValue");
+    	user = userRepository.save(new User("test.user", "testFN", "testLN", "test@email.com", "123456", "1231231232222"));
+    	prov1 = providerRepository.save(new Provider(user, "prov1", ""));
+		app1prov1 = applicationRepository.save(new Application(prov1, "app1", "", "", requirements));
+		prov1 = providerRepository.save(new Provider(user, "prov1", ""));
+		app2prov1 = applicationRepository.save(new Application(prov1, "app2", "", "", requirements));
+		prov2 = providerRepository.save(new Provider(user, "prov2", ""));
+		app1prov2 = applicationRepository.save(new Application(prov2, "app1", "", "", requirements));
+		prov2 = providerRepository.save(new Provider(user, "prov2", ""));
+		app2prov2 = applicationRepository.save(new Application(prov2, "app2", "", "", requirements));
 	}
+	
+	private Provider prov1;
+	private Provider prov2;
+	private Application app1prov1;
+	private Application app2prov2;
+	private Application app2prov1;
+	private Application app1prov2;
+	private JsonMetadata meta;
 	
 	@Test
 	public void insertNotificationTest(){
-		Notification notification = new Notification(1l, "Notif.title", "Notif.description",
-				"Notif.shortdesc", "Notif.provider", "Notif.application", System.currentTimeMillis(), user);
+		meta = new JsonMetadata();
+		meta.set("metaKey", "metaValue");
+		Notification notification = notificationRepository.save(new Notification(app1prov1, "Notif.user0.1", "desc1", "s.desc1", 1l, user, meta));
 		notification = notificationRepository.save(notification);
 		notification = notificationRepository.findOne(notification.id);
 		Assert.assertNotNull(notification);
@@ -43,10 +75,10 @@ public class NotificationRepositoryTest {
 	
 	@Test
 	public void findByUserAndOtherFiltersTest() throws Exception{
-		notificationRepository.save(new Notification(2, "Notif.user.1", "desc", "s.desc1", "prov1", "app1", 0, user));
-		notificationRepository.save(new Notification(3, "Notif.user.2", "desc-keyword", "s.desc2", "prov1", "app2", 1, user));
-		notificationRepository.save(new Notification(4, "Notif.user.3", "desc-keyword", "s.desc3", "prov2", "app1", 2, user));
-		notificationRepository.save(new Notification(5, "Notif.user.4", "desc", "s.desc4", "prov2", "app2", 3, user));
+		notificationRepository.save(new Notification(app1prov1, "Notif.user.1", "desc", "s.desc1", 0l, user, meta));
+		notificationRepository.save(new Notification(app2prov1, "Notif.user.2", "desc-keyword", "s.desc2", 1l, user, meta));
+		notificationRepository.save(new Notification(app1prov2, "Notif.user.3", "desc-keyword", "s.desc3", 2l, user, meta));
+		notificationRepository.save(new Notification(app2prov2, "Notif.user.4", "desc", "s.desc3", 3l, user, meta));
 		
 		// filter only by user
 		List<Notification> list = notificationRepository.findByUserAndOtherFilters(user.id, "%", "%", "%", Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -81,50 +113,51 @@ public class NotificationRepositoryTest {
 		Assert.assertEquals(0, list.size());
 	}
 	
-	
 	@Test
 	public void findByApplicationAndOtherFiltersTest() throws Exception{
-		notificationRepository.save(new Notification(2, "Notif.user.1", "desc", "s.desc1", "prov1", "app1", 0, user));
-		notificationRepository.save(new Notification(3, "Notif.user.2", "desc-keyword", "s.desc2", "prov1", "app2", 1, user));
-		notificationRepository.save(new Notification(4, "Notif.user.3", "desc-keyword", "s.desc3", "prov2", "app1", 2, user));
-		notificationRepository.save(new Notification(5, "Notif.user.4", "desc", "s.desc4", "prov2", "app2", 3, user));
+		notificationRepository.save(new Notification(app1prov1, "Notif.user.1", "desc", "s.desc1", 0l, user, meta));
+		notificationRepository.save(new Notification(app2prov1, "Notif.user.2", "desc-keyword", "s.desc2", 1l, user, meta));
+		notificationRepository.save(new Notification(app1prov2, "Notif.user.3", "desc-keyword", "s.desc3", 2l, user, meta));
+		notificationRepository.save(new Notification(app2prov2, "Notif.user.4", "desc", "s.desc3", 3l, user, meta));
 		
 		// filter only by application
-		List<Notification> list = notificationRepository.findByApplicationAndOtherFilters("app1", "%", -1, "%", Integer.MIN_VALUE, Integer.MAX_VALUE);
-		checkNotifications(list, new String[]{"Notif.user.1", "Notif.user.3"}, 2);
+		List<Notification> list = notificationRepository.findByApplicationAndOtherFilters(app1prov2.id, "%", -1l, "%", Long.MIN_VALUE, Long.MAX_VALUE);
+		checkNotifications(list, new String[]{"Notif.user.1", "Notif.user.3"}, 1);
 		
 		// filter by application and timestamp
-		list = notificationRepository.findByApplicationAndOtherFilters("app1", "%", -1, "%", 0, 1);
+		list = notificationRepository.findByApplicationAndOtherFilters(app1prov1.id, "%", -1l, "%", 0l, 1l);
 		checkNotifications(list, new String[]{"Notif.user.1"}, 1);
 		
 		// filter by application and user
-		list = notificationRepository.findByApplicationAndOtherFilters("app2", "%", user.id, "%", Integer.MIN_VALUE, Integer.MAX_VALUE);
-		checkNotifications(list, new String[]{"Notif.user.2", "Notif.user.4"}, 2);
+		list = notificationRepository.findByApplicationAndOtherFilters(app2prov2.id, "%", user.id, "%", Long.MIN_VALUE, Long.MAX_VALUE);
+		checkNotifications(list, new String[]{"Notif.user.2", "Notif.user.4"}, 1);
 		
 		// filter by application and provider
-		list = notificationRepository.findByApplicationAndOtherFilters("app1", "%", -1, "prov1", Integer.MIN_VALUE, Integer.MAX_VALUE);
+		list = notificationRepository.findByApplicationAndOtherFilters(app1prov1.id, "%", -1l, "prov1", Long.MIN_VALUE, Long.MAX_VALUE);
 		checkNotifications(list, new String[]{"Notif.user.1"}, 1);
 		
 		// filter by application and user and provider
-		list = notificationRepository.findByApplicationAndOtherFilters("app1", "%", user.id, "prov1", Integer.MIN_VALUE, Integer.MAX_VALUE);
+		list = notificationRepository.findByApplicationAndOtherFilters(app1prov1.id, "%", user.id, "prov1", Long.MIN_VALUE, Long.MAX_VALUE);
 		checkNotifications(list, new String[]{"Notif.user.1", }, 1);
 		
 		// filter by application and keyword
-		list = notificationRepository.findByApplicationAndOtherFilters("app1", "desc-keyword", user.id, "%", Integer.MIN_VALUE, Integer.MAX_VALUE);
+		list = notificationRepository.findByApplicationAndOtherFilters(app1prov2.id, "desc-keyword", user.id, "%", Long.MIN_VALUE, Long.MAX_VALUE);
 		checkNotifications(list, new String[]{"Notif.user.3"}, 1);		
 		
 		// filter by application and user and provider and keyword and timestamp
-		list = notificationRepository.findByApplicationAndOtherFilters("app2", "desc-keyword", user.id, "prov1", Integer.MIN_VALUE, Integer.MAX_VALUE);
+		list = notificationRepository.findByApplicationAndOtherFilters(app2prov1.id, "desc-keyword", user.id, "prov1", Long.MIN_VALUE, Long.MAX_VALUE);
 		checkNotifications(list, new String[]{"Notif.user.2"}, 1);
-		list = notificationRepository.findByApplicationAndOtherFilters("app2", "desc", user.id, "prov1", Integer.MIN_VALUE, Integer.MAX_VALUE);
+		list = notificationRepository.findByApplicationAndOtherFilters(app1prov2.id, "desc", user.id, "prov1", Long.MIN_VALUE, Long.MAX_VALUE);
 		Assert.assertEquals(0, list.size());
-		list = notificationRepository.findByApplicationAndOtherFilters("app2", "desc-keyword", user.id, "prov1", 2, 3);
+		list = notificationRepository.findByApplicationAndOtherFilters(app1prov2.id, "desc-keyword", user.id, "prov1", 2l, 3l);
 		Assert.assertEquals(0, list.size());
 	}
 	
 	@After
-	public void after() {
+	public void cleanUp() {
 		notificationRepository.deleteAll();
+		applicationRepository.deleteAll();
+		providerRepository.deleteAll();
 		userRepository.deleteAll();
 	}
 	

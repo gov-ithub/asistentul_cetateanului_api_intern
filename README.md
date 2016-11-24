@@ -1,5 +1,17 @@
 # Asistentul Cetateanului: REST Api pentru consumeri (istoric, submissions, meta-data, etc.)
 
+## Configurare
+```
+cp src/main/resources/application.properties.dist src/main/resources/application.properties
+cp src/test/resources/test.properties.dist src/test/resources/test.properties
+```
+Editati apoi cele doua fisiere noi.
+
+## Dependinte
+
+Acest proiect necesita biblioteca asistentul_cetateanului_dao_lib pentru a rula.
+Urmati instructiunile de impachetare din acel repository, apoi copiati jar-ul rezultat in src/main/resources
+
 ## Impachetare
 ```
 mvn package

@@ -1,8 +1,10 @@
 package org.govithub.govac.consumerapi.controller;
 
-import org.govithub.govac.consumerapi.dao.UserRepository;
-import org.govithub.govac.consumerapi.model.User;
+import java.util.Optional;
+
 import org.govithub.govac.consumerapi.util.GovacException;
+import org.govithub.govac.dao.model.User;
+import org.govithub.govac.dao.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +24,14 @@ public class UsersController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public User updateUser(@PathVariable(value = "id") long userId, @RequestBody User user) throws GovacException {
-		User existingUser = usersRepo.findOne(userId);
-		if (existingUser == null) {
+	public User updateUser(@PathVariable(value="id") long userId, @RequestBody User user) throws GovacException {
+		Optional<User> existingUserOpt = usersRepo.findById(userId);
+		if (!existingUserOpt.isPresent()) {
 			throw new GovacException("Invalid user.");
 		}
-
+		
+		User existingUser = existingUserOpt.get();
+		
 		if (user.username != null && !user.username.isEmpty())
 			existingUser.username = user.username;
 		if (user.firstName != null && !user.firstName.isEmpty())
