@@ -23,6 +23,19 @@ public class UsersController {
 		this.usersRepo = userRepository;
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	public User getUser(@PathVariable(value="id") long userId) throws GovacException {
+		
+		// TODO: (Cosmin Poteras) if userId != currentUser.id or !currentUser.isAdmin() return forbidden
+		
+		Optional<User> userOpt = usersRepo.findById(userId);
+		if (!userOpt.isPresent()) {
+			throw new GovacException("User not found.");
+		}
+		
+		return userOpt.get();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public User updateUser(@PathVariable(value="id") long userId, @RequestBody User user) throws GovacException {
 		Optional<User> existingUserOpt = usersRepo.findById(userId);
