@@ -10,7 +10,24 @@ Editati apoi cele doua fisiere noi.
 ## Dependinte
 
 Acest proiect necesita biblioteca asistentul_cetateanului_dao_lib pentru a rula.
-Urmati instructiunile de impachetare din acel repository, apoi copiati jar-ul rezultat in src/main/resources
+Puteti adauga dependinta folosing jitpack, astfel:
+
+```
+<dependency>
+	<groupId>com.github.gov-ithub</groupId>
+	<artifactId>asistentul_cetateanului_dao_lib</artifactId>
+	<version>0.0.1-DEV</version>
+</dependency>
+```
+si
+```
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+```
 
 ## Impachetare
 ```
