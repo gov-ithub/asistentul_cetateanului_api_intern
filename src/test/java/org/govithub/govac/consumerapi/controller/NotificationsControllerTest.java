@@ -63,8 +63,8 @@ public class NotificationsControllerTest {
     @Before
     public void setUp() {
     	requirements.set("reqkey", "reqValue");
-    	user0 = userRepository.save(new User("test.user", "test", "user", "test@user.com", "0722123123", "1841322319942"));
-    	user1 = userRepository.save(new User("test.user", "test", "user", "test@user.com", "0722123123", "1841322319942"));
+    	user0 = userRepository.save(new User("test", "user", "test@user.com", "0722123123", "1841322319942"));
+    	user1 = userRepository.save(new User("test", "user", "test@user.com", "0722123123", "1841322319942"));
     	prov1 = providerRepository.save(new Provider(user0, "prov1", ""));
 		app1prov1 = applicationRepository.save(new Application(prov1, "app1", "", "", requirements));
 		app2prov1 = applicationRepository.save(new Application(prov1, "app2", "", "", requirements));

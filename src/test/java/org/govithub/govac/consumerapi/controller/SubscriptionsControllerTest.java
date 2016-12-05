@@ -10,8 +10,6 @@ import java.io.IOException;
 
 import org.apache.http.HttpStatus;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
-import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.govithub.govac.dao.model.Application;
@@ -70,7 +68,7 @@ public class SubscriptionsControllerTest {
     @Before
     public void setUp() {
     	requirements.set("reqkey", "reqValue");
-    	user = userRepository.save(new User("test.user", "test", "user", "test@user.com", "0722123123", "1841322319942"));
+    	user = userRepository.save(new User("test", "user", "test@user.com", "0722123123", "1841322319942"));
     	prov = providerRepository.save(new Provider(user, "prov1", ""));
 		app1 = applicationRepository.save(new Application(prov, "app1", "", "", requirements));
 		app2 = applicationRepository.save(new Application(prov, "app2", "", "", requirements));
@@ -173,12 +171,11 @@ public class SubscriptionsControllerTest {
     
     @Test
     public void getSubscriptionByUserIdAndApplicationId() {
-    	User user2 = userRepository.save(new User("test.user", "test", "user", "test@user.com", "0722123123", "1841322319942"));
+    	User user2 = userRepository.save(new User("test", "user", "test@user.com", "0722123123", "1841322319942"));
     	
     	JsonMetadata metadata = new JsonMetadata();
     	metadata.set("reqkey", "valueTest");
     	Subscription subscription1 = subscriptionRepository.save(new Subscription(user.id, app1.id, System.currentTimeMillis(), metadata));
-    	Subscription subscription2 = subscriptionRepository.save(new Subscription(user.id, app2.id, System.currentTimeMillis(), metadata));
     	subscriptionRepository.save(new Subscription(user.id, app2.id, System.currentTimeMillis(), metadata));
     	Subscription subscription4 = subscriptionRepository.save(new Subscription(user2.id, app1.id, System.currentTimeMillis(), metadata));
     	

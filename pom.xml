@@ -74,13 +74,18 @@
 			<version>4.0.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.govac.dao</groupId>
-			<artifactId>govac-dao-lib</artifactId>
-			<version>0.0.1.SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/govac-dao-lib-0.0.1-SNAPSHOT.jar</systemPath>
+			<groupId>com.github.gov-ithub</groupId>
+			<artifactId>asistentul_cetateanului_dao_lib</artifactId>
+			<version>0.0.1-DEV</version>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -90,5 +95,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

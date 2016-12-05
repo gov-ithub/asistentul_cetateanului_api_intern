@@ -50,8 +50,8 @@ public class UsersControllerTest {
 	public void setup() {
 		RestAssured.port = port;
 		cleanUp();
-		user = userRepository.save(new User("test.user.1", "user1FN", "user1LN", "user1@email.com", "123456", "1231231231122"));
-		userRepository.save(new User("test.user.2", "user2FN", "user2LN", "user2@email.com", "345678", "2345677654433"));		
+		user = userRepository.save(new User("user1FN", "user1LN", "user1@email.com", "123456", "1231231231122"));
+		userRepository.save(new User("user2FN", "user2LN", "user2@email.com", "345678", "2345677654433"));		
 	}
 	
 	@After
@@ -65,12 +65,11 @@ public class UsersControllerTest {
 	public void shouldUpdateUser() throws JsonGenerationException, JsonMappingException, IOException {
 		given().
 		contentType(ContentType.JSON).
-			body(objectMapper.writeValueAsString(new User("test.user.updated", "userFN-updated", "userLN-updated", "updated@email.com", "111222", "111222"))).
+			body(objectMapper.writeValueAsString(new User("userFN-updated", "userLN-updated", "updated@email.com", "111222", "111222"))).
 		when().
         	post("/users/{id}", user.id).
         then().
         	statusCode(HttpStatus.SC_OK).
-        	body("username", is("test.user.updated")).
         	body("firstName", is("userFN-updated")).
         	body("lastName", is("userLN-updated")).
         	body("email", is("updated@email.com")).
@@ -78,7 +77,6 @@ public class UsersControllerTest {
         	body("cnp", is("111222"));
         	
 		User u = userRepository.findOne(user.id);
-		assertEquals("test.user.updated", u.username);
 		assertEquals("updated@email.com", u.email);
 		assertEquals("111222", u.phone);
 	}

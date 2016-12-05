@@ -26,7 +26,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testSaveAndFindUser() {
-    	User user = new User("test.user", "testFN", "testLN", "test@email.com", "123456", "1231231232222");
+    	User user = new User("testFN", "testLN", "test@email.com", "123456", "1231231232222");
     	user = userRepository.save(user);
     	user = userRepository.findById(user.id).get();
     	Assert.assertNotNull(user);
@@ -34,7 +34,7 @@ public class UserRepositoryTest {
     
     @Test
     public void testUpdateUserMetaData(){
-    	User user = new User("update.contact", "testFN", "testLN", "test@email.com", "123456", "1234567890");
+    	User user = new User("testFN", "testLN", "test@email.com", "123456", "1234567890");
     	user.id = 1l;
 		user = userRepository.save(user);
     	user = userRepository.findOne(user.id);

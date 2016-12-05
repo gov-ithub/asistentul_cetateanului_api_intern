@@ -44,7 +44,7 @@ public class NotificationRepositoryTest {
 	@Before
 	public void init() {
 		requirements.set("reqKey", "reqValue");
-    	user = userRepository.save(new User("test.user", "testFN", "testLN", "test@email.com", "123456", "1231231232222"));
+    	user = userRepository.save(new User("testFN", "testLN", "test@email.com", "123456", "1231231232222"));
     	prov1 = providerRepository.save(new Provider(user, "prov1", ""));
 		app1prov1 = applicationRepository.save(new Application(prov1, "app1", "", "", requirements));
 		prov1 = providerRepository.save(new Provider(user, "prov1", ""));

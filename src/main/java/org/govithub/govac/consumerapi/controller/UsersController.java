@@ -45,8 +45,6 @@ public class UsersController {
 		
 		User existingUser = existingUserOpt.get();
 		
-		if (user.username != null && !user.username.isEmpty())
-			existingUser.username = user.username;
 		if (user.firstName != null && !user.firstName.isEmpty())
 			existingUser.firstName = user.firstName;
 		if (user.lastName != null && !user.lastName.isEmpty())
