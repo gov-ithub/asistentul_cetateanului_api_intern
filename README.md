@@ -10,7 +10,7 @@ Editati apoi cele doua fisiere noi.
 ## Dependinte
 
 Acest proiect necesita biblioteca asistentul_cetateanului_dao_lib pentru a rula.
-Puteti adauga dependinta folosing jitpack, astfel:
+In pom.xml veti gasi codul care adauga aceasta referinta folosind jitpack, astfel:
 
 ```
 <dependency>
@@ -28,6 +28,7 @@ si
 	</repository>
 </repositories>
 ```
+Daca este cazul, modificati versiunea.
 
 ## Impachetare
 ```
