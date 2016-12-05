@@ -45,10 +45,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
@@ -72,8 +68,25 @@
 			<artifactId>postgresql</artifactId>
 			<version>9.4-1206-jdbc42</version>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gov-ithub</groupId>
+			<artifactId>asistentul_cetateanului_dao_lib</artifactId>
+			<version>0.0.1-DEV</version>
+		</dependency>
 	</dependencies>
-	
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -82,5 +95,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
+
 </project>

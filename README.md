@@ -1,5 +1,35 @@
 # Asistentul Cetateanului: REST Api pentru consumeri (istoric, submissions, meta-data, etc.)
 
+## Configurare
+```
+cp src/main/resources/application.properties.dist src/main/resources/application.properties
+cp src/test/resources/test.properties.dist src/test/resources/test.properties
+```
+Editati apoi cele doua fisiere noi.
+
+## Dependinte
+
+Acest proiect necesita biblioteca asistentul_cetateanului_dao_lib pentru a rula.
+In pom.xml veti gasi codul care adauga aceasta referinta folosind jitpack, astfel:
+
+```
+<dependency>
+	<groupId>com.github.gov-ithub</groupId>
+	<artifactId>asistentul_cetateanului_dao_lib</artifactId>
+	<version>0.0.1-DEV</version>
+</dependency>
+```
+si
+```
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+```
+Daca este cazul, modificati versiunea.
+
 ## Impachetare
 ```
 mvn package

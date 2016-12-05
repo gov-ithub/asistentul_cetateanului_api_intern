@@ -10,9 +10,9 @@ import org.apache.http.HttpStatus;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.govithub.govac.consumerapi.dao.NotificationRepository;
-import org.govithub.govac.consumerapi.dao.UserRepository;
-import org.govithub.govac.consumerapi.model.User;
+import org.govithub.govac.dao.model.User;
+import org.govithub.govac.dao.repository.NotificationRepository;
+import org.govithub.govac.dao.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,8 +50,8 @@ public class UsersControllerTest {
 	public void setup() {
 		RestAssured.port = port;
 		cleanUp();
-		user = userRepository.save(new User(1, "test.user.1", "user1FN", "user1LN", "user1@email.com", "123456", "1231231231122"));
-		userRepository.save(new User(2, "test.user.2", "user2FN", "user2LN", "user2@email.com", "345678", "2345677654433"));		
+		user = userRepository.save(new User("user1FN", "user1LN", "user1@email.com", "123456", "1231231231122"));
+		userRepository.save(new User("user2FN", "user2LN", "user2@email.com", "345678", "2345677654433"));		
 	}
 	
 	@After
@@ -65,20 +65,18 @@ public class UsersControllerTest {
 	public void shouldUpdateUser() throws JsonGenerationException, JsonMappingException, IOException {
 		given().
 		contentType(ContentType.JSON).
-			body(objectMapper.writeValueAsString(new User(3, "test.user.updated", "userFN-updated", "userLN-updated", "updated@email.com", "111222", "111222"))).
+			body(objectMapper.writeValueAsString(new User("userFN-updated", "userLN-updated", "updated@email.com", "111222", "111222"))).
 		when().
         	post("/users/{id}", user.id).
         then().
         	statusCode(HttpStatus.SC_OK).
-        	body("username", is("test.user.updated")).
         	body("firstName", is("userFN-updated")).
         	body("lastName", is("userLN-updated")).
         	body("email", is("updated@email.com")).
         	body("phone", is("111222")).
         	body("cnp", is("111222"));
         	
-		User u = userRepository.findById(user.id);
-		assertEquals("test.user.updated", u.username);
+		User u = userRepository.findOne(user.id);
 		assertEquals("updated@email.com", u.email);
 		assertEquals("111222", u.phone);
 	}

@@ -1,6 +1,7 @@
 package org.govithub.govac.consumerapi.dao;
 
-import org.govithub.govac.consumerapi.model.User;
+import org.govithub.govac.dao.model.User;
+import org.govithub.govac.dao.repository.UserRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,16 +26,17 @@ public class UserRepositoryTest {
 
     @Test
     public void testSaveAndFindUser() {
-    	User user = new User(1, "test.user", "testFN", "testLN", "test@email.com", "123456", "1231231232222");
+    	User user = new User("testFN", "testLN", "test@email.com", "123456", "1231231232222");
     	user = userRepository.save(user);
-    	user = userRepository.findOne(user.id);
+    	user = userRepository.findById(user.id).get();
     	Assert.assertNotNull(user);
     }
     
     @Test
     public void testUpdateUserMetaData(){
-    	User user = new User(2, "update.contact", "testFN", "testLN", "test@email.com", "123456", "1234567890");
-    	user = userRepository.save(user);
+    	User user = new User("testFN", "testLN", "test@email.com", "123456", "1234567890");
+    	user.id = 1l;
+		user = userRepository.save(user);
     	user = userRepository.findOne(user.id);
     	Assert.assertNotNull(user);
     	Assert.assertEquals("testFN", user.firstName);
